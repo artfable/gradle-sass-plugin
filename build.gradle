@@ -75,12 +75,11 @@ bintray {
     user = project.hasProperty('bintrayUser') ? project.ext.bintrayUser : System.getenv('BINTRAY_USER')
     key = project.hasProperty('bintrayKey') ? project.ext.bintrayKey : System.getenv('BINTRAY_KEY')
     publications = ['mavenJava']
-    override = true
     pkg {
         repo = 'gradle-plugins'
-        name = 'gradle-index-plugin'
+        name = 'gradle-sass-plugin'
         licenses = ['MIT']
-        vcsUrl = 'https://github.com/artfable/gradle-index-plugin.git'
+        vcsUrl = 'https://github.com/artfable/gradle-sass-plugin.git'
         version {
             attributes = ['gradle-plugin': 'artfable.sass:com.github.artfable.gradle:gradle-sass-plugin']
         }
