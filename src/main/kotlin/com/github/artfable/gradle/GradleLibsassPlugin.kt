@@ -41,6 +41,8 @@ class GradleLibsassPlugin : Plugin<Project> {
                 compileGroup(sourceDir, outputDir, config, project.logger)
             }
         }
+
+        task.dependsOn("processResources")
     }
 
     private fun compileGroup(sourceDir: File, outputDir: File, config: GradleLibsassPluginExtension, logger: Logger) {
