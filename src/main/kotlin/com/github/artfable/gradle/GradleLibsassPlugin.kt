@@ -22,7 +22,7 @@ class GradleLibsassPlugin : Plugin<Project> {
         val config = project.extensions.create("sass", GradleLibsassPluginExtension::class.java)
         val task = project.task("compileSass")
 
-        task.doFirst { task ->
+        task.doFirst {
             for (group in config.groups) {
                 val sourceDir: File = File(group.sourceDir)
                 val outputDir: File = File(group.outputDir)
@@ -42,13 +42,15 @@ class GradleLibsassPlugin : Plugin<Project> {
             }
         }
 
-        task.dependsOn("processResources")
+        project.tasks.findByName("processResources")?.let {
+            task.mustRunAfter(it)
+        }
     }
 
     private fun compileGroup(sourceDir: File, outputDir: File, config: GradleLibsassPluginExtension, logger: Logger) {
         val compiler: Compiler = Compiler()
 
-        for (file in sourceDir.listFiles { file, name -> !name.startsWith('_') && name.endsWith(".scss") }) {
+        for (file in sourceDir.listFiles { _, name -> !name.startsWith('_') && name.endsWith(".scss") }) {
             val options: Options = Options()
             options.includePaths.add(sourceDir)
             options.outputStyle = OutputStyle.COMPACT
@@ -86,12 +88,12 @@ class GradleLibsassPlugin : Plugin<Project> {
     }
 }
 
-open class GradleLibsassPluginExtension() {
+open class GradleLibsassPluginExtension {
     val groups: MutableList<GradleLibsassPluginGroup> = ArrayList()
     var optimisation: Boolean = true
     var ignoreFailures: Boolean = false
 
-    fun group(closure: Closure<Any>) {
+    fun group(closure: Closure<Unit>) {
         val group: GradleLibsassPluginGroup = GradleLibsassPluginGroup()
         closure.delegate = group
         closure.call()
@@ -99,7 +101,7 @@ open class GradleLibsassPluginExtension() {
     }
 }
 
-open class GradleLibsassPluginGroup() {
+open class GradleLibsassPluginGroup {
     var sourceDir: String? = null
     var outputDir: String? = null
 

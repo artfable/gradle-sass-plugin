@@ -1,5 +1,5 @@
 # Gradle SASS Plugin
-(version: 0.0.1)
+(version: 0.1.0)
 
 ## Overview
 The plugin that was written on [kotlin](https://kotlinlang.org) for working with [SASS](http://sass-lang.com/). It allowed compile .scss (not .sass!) files to .css. 
@@ -47,6 +47,21 @@ sass {
     }
     //  ignoreFailures = false
     //  optimisation = true
+}
+```
+
+or for the kotlin dsl
+```kotlin
+configure<GradleLibsassPluginExtension> {
+    //  ignoreFailures = false
+    //  optimisation = true
+    group(delegateClosureOf<GradleLibsassPluginGroup> {
+        sourceDir = "$projectDir/src/sass"
+        outputDir = "$buildDir/dist/css"
+    })
+    group(delegateClosureOf<GradleLibsassPluginGroup> {
+        // ...
+    })
 }
 ```
 
