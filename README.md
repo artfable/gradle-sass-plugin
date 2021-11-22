@@ -1,5 +1,5 @@
 # Gradle SASS Plugin
-(version: 0.1.0)
+[ ![artifactory](https://img.shields.io/badge/Artifactory-v0.2.0-green) ](https://artfable.jfrog.io/ui/packages/gav:%2F%2Fcom.artfable.gradle:gradle-sass-plugin)
 
 ## Overview
 The plugin that was written on [kotlin](https://kotlinlang.org) for working with [SASS](http://sass-lang.com/). It allowed compile .scss (not .sass!) files to .css. 
@@ -14,20 +14,22 @@ This plugin has own importer, that removes such duplicates. (Can be switched off
 Now, it works only with .scss files. Files that start with '_' used only for import. Plugin parse all subdirectories in `sourceDir`.
 
 ## Install
-```groovy
+```kotlin
 buildscript {
     repositories {
-        jcenter()
+        maven(url = "https://artfable.jfrog.io/artifactory/default-maven-local")
     }
     dependencies {
-        classpath "com.github.artfable.gradle:gradle-sass-plugin:0.0.1"
+        classpath("com.artfable.gradle:gradle-sass-plugin:0.2.0")
     }
 }
 
-apply plugin: 'artfable.sass'
+apply(plugin = "artfable.sass")
 ```
 
 It'll add a task `compileSass`
+
+For use in `plugins {}` see [Gradle resolution strategy](https://docs.gradle.org/current/userguide/custom_plugins.html#note_for_plugins_published_without_java_gradle_plugin)
 
 ## Usage
 Parameters to configure:
@@ -36,10 +38,10 @@ Parameters to configure:
 + ignoreFailures - if it true, task won't failed if some of files can't be compiled *(default: false)*
 + optimisation - switch on importer, that filter duplicates *(default: true)* 
 
-```groovy
+```kotlin
 sass {
     group {
-        sourceDir = "src/main/webapp/sass"
+        sourceDir = "${projectDir}/src/main/webapp/sass"
         outputDir = "${buildDir}/tmp/webapp/css"
     }
     group {
@@ -47,21 +49,6 @@ sass {
     }
     //  ignoreFailures = false
     //  optimisation = true
-}
-```
-
-or for the kotlin dsl
-```kotlin
-configure<GradleLibsassPluginExtension> {
-    //  ignoreFailures = false
-    //  optimisation = true
-    group(delegateClosureOf<GradleLibsassPluginGroup> {
-        sourceDir = "$projectDir/src/sass"
-        outputDir = "$buildDir/dist/css"
-    })
-    group(delegateClosureOf<GradleLibsassPluginGroup> {
-        // ...
-    })
 }
 ```
 

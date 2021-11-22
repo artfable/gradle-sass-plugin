@@ -1,4 +1,4 @@
-package com.github.artfable.gradle
+package com.artfable.gradle
 
 import io.bit3.jsass.importer.Import
 import io.bit3.jsass.importer.Importer
@@ -13,7 +13,7 @@ import java.util.*
  * 12.09.16
  */
 class NonDuplicateImporter(val logger: Logger) : Importer {
-    val duplicates: MutableSet<String> = HashSet()
+    private val duplicates: MutableSet<String> = HashSet()
 
     override fun apply(url: String, previous: Import?): MutableCollection<Import>? {
         previous?: throw IllegalStateException("NonDuplicateImporter can't be first")
@@ -25,10 +25,10 @@ class NonDuplicateImporter(val logger: Logger) : Importer {
 
         if (!importFile.exists()) {
             val separatorIndex: Int = url.lastIndexOf('/')
-            if (separatorIndex < 0) {
-                resolvedUrl = '_' + resolvedUrl
+            resolvedUrl = if (separatorIndex < 0) {
+                "_$resolvedUrl"
             } else {
-                resolvedUrl = resolvedUrl.substring(0, separatorIndex) + "/_" + resolvedUrl.substring(separatorIndex + 1)
+                resolvedUrl.substring(0, separatorIndex) + "/_" + resolvedUrl.substring(separatorIndex + 1)
             }
             importPath = srcFile.parent + File.separator + resolvedUrl + ".scss"
             importFile = File(importPath)
@@ -46,8 +46,4 @@ class NonDuplicateImporter(val logger: Logger) : Importer {
     }
 }
 
-class ImportException : Throwable {
-    constructor(message: String?) : super(message)
-    constructor(message: String?, cause: Throwable?) : super(message, cause)
-    constructor(cause: Throwable?) : super(cause)
-}
+class ImportException(message: String?, cause: Throwable? = null) : Throwable(message, cause)
